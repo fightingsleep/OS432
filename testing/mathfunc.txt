@@ -1,0 +1,32 @@
+/*
+float sine(float angle)
+{
+        float x = angle;
+        float result = 0;
+        int fact = 1;
+        int steps = 7;
+        int i = 0;
+        for(i = 1; i < steps; i++)
+        {
+                result = result + x / fact;
+                fact = fact * 2 * i * (2 * i + 1);
+                x = -x * angle * angle;
+        }
+        return result;
+}
+
+float cosine(float angle)
+{
+        float x = 1;
+        float result = 0;
+        int fact = 1;
+        int steps = 7;
+        int i = 0;
+        for(i = 1; i < steps; i++)
+        {
+                result = result + x / fact;
+                fact = fact * 2 * i * (2 * i - 1);
+                x = -x * angle * angle; 
+        }
+        return result;
+}*/

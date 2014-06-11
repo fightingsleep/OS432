@@ -1,0 +1,9 @@
+Syscalls Documentation
+
+All system calls are are outlined in user_syscalls.h, and are partially
+implemented in user_syscalls.c. This file contains inline assembly which sets
+the appropriate registers and makes the SVC call. The system level functions
+that execute the system calls are located in various files depending on the
+system call type (ipc_syscalls.c, process_syscalls.c, memory_syscalls.c,
+misc_syscalls.c). The internal system call function array is initalized in
+syscalls_init.c, and the system call numbers are defined in syscalls.h.

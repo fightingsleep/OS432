@@ -1,0 +1,55 @@
+Process Documentation
+Jeseph Hinz
+
+Creating a process
+
+1.gets a free pid
+2.initializers program counter (for a general process it will launch the
+  new_process() function, which will jump to the the function pointer defined 
+  in register r6 the next time the process is scheduled
+3.initializes heap
+4.initializes stack
+5.adds to list of callers children
+6.adds to list of current processes
+
+Process Structure:
+
+	pid: process id = 1
+	ppid: process id of parent = 0
+	program_counter: address of next line of code to execute
+	process_heap: data memory for this process
+	  address: adderss of start location
+	  size: definition of lingth of heap
+	  next: currently NULL
+	process_space_base: same as heap address for
+	stack_pointer: address of top of stack 
+	state: current state of process, starts as active
+	children: list of child processes
+	message_queue: list of messages
+
+Master Process:
+This is the default process that will be started once the pi is powered on.
+It is currently acting as a sort of "shell" for the operating system.
+It sends a promp to the console, then requests the next line input.
+it uses this line as a command and if it is defined creates a process according
+to that command.
+
+Console Process:
+recieves messages from other processes, and performs IO tasks for them.
+if it is a print request it will print the string onto the screen, if it is a 
+read request, it will get a line of keyboard input and send the line to the 
+process.
+
+Scheduling Processes:
+The scheduler is currently a very simple implementation
+it takes the list of processes, puts the first process on the back of the list
+and restores the context of the new first process
+
+Restoring Context:
+writen in assemply
+essentially pops the entries off of the process' stack in the reverse order 
+they were pushed, into the corresponding registers which will allow the 
+process to continue where it was interrupted
+
+
+

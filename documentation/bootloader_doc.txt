@@ -1,0 +1,85 @@
+Bootloader Documentation
+Joseph Hinz 11107081
+April 1 2014
+
+Started writing code for the Pi in assembly according to the instructions
+on the "Baking Pi website"
+
+we used several of the simple code snippets from this website to use as
+functions for the pi as they were simple enough that rerwiting them
+wouldnt result in a meaningful difference.
+
+the enty point is determined by the assembler by the directives:
+.section .init
+.globl _start
+_start:
+
+usually in the main.s or init.s file
+
+The first lessons are on basic operations like turning an LED on and off
+by enabling output to GPIO pins and writing to the appropriate register.
+This is to get the reader used to working with assembly and using the 
+resources available on the Pi. It is written with a fairly inexperienced 
+audience in mind so it is very well explained.
+
+example
+;enable gpio with
+ldr r0,=0x20200000; load r0 with adress of GPIO controller
+mov r1,#1	    ; move 1 into r1, left shift it by 18, then move it into
+lsl r1,#18        ; the value in r0+4
+str r1,[r0,#4]
+
+;turn led off with
+mov r1,#1
+lsl r1,#16      ;shifted by 16 for pin 16
+str r1,[r0,#40] ;ofset by 40 insted of 4
+
+other information covered by the tutorials:
+busy wait function
+timer control
+data storage
+frame buffers
+
+
+Our bootloaderstarts in init.s but quickly jumps to main.c which contains 
+several initialization functions
+
+init.s:
+initializes stack pointer (this is very imporant as it makes functions work)
+
+has load pc instructions at various offsets from the start of the file
+these will eventually be copied to the start of the pi's address space
+as that is where the exception's entry point is
+Normally that space would be filled with things that the linux kernel uses
+but since we arent using linux we need to define our own code there.
+
+main.c:
+
+input init:
+currently empty (should keyboard input be handled here???)
+
+output init:
+sets upt he frame buffer description table and allows output to screen
+
+memory init:
+sets up heap address and size
+
+idt init:
+copies the interrupt description table from init.s to the beggining of the 
+address space
+
+syscalls_init:
+defines the numbers and parameters for the various syscalls the OS offers
+
+timer_interrupt_init:
+loads the pre divider value into the timer
+enables timer interrupts
+loads the value into the timer
+enables the timer
+
+processes_init:
+creates the structs and fills in the fields for the master and consol 
+processesthen calls schedule to allow the master process to take 
+control
+
+bootloader is now finished

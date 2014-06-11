@@ -1,0 +1,10 @@
+documentation done:
+bootloader
+processes/scheduler
+interrupts
+syscalls handler
+
+documentation to be done:
+IO
+syscall implementations
+memory management

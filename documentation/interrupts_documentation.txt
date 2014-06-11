@@ -1,0 +1,192 @@
+Interrupts Documentation
+Joseph Hinz
+
+purpose: create an timer driven interrupt that will call the scheduler and cause a context switch.
+
+why: using this will allow each process to automatically be scheduled without having to worry about how much time it is taking up.
+
+     Otherwise each process would have to call the scheduler manually in order to have scheduling, which would cause issues.
+
+how:
+Found example for interrupt handler.
+armv6 uses memory space at 0x0000 for interrupt vectors
+
+pi boots at 0x8000 
+0 -> 8000 is used for data space for the linux kernel, we dont care about the linux kernel.
+
+create an interrupt table at 0x8000, then copy to 0x0000
+example code: (this must be written at 0x8000, or elsewhere but change memory addresses)
+
+.globl _start
+_start:                          ;these ldr instructions are the interrupt vectors. they load the address of the interrupt handler onto the pc
+    ldr pc,reset_handler	 ;the labels for each are defined below
+    ldr pc,undefined_handler	 ;on startup, the pc will be loaded with reset_handler, which jumps to the reset label
+    ldr pc,swi_handler		 ;most of these are currently sent to an infinite loop
+    ldr pc,prefetch_handler	 ;but the irq_handler actually does point to the interrupt handler which is mostly written in c
+    ldr pc,data_handler
+    ldr pc,unused_handler
+    ldr pc,irq_handler
+    ldr pc,fiq_handler
+reset_handler: .word reset       ;these labels may also be copied into early memory????
+undefined_handler: .word hang    ;not sure if this is actual code or just definitions
+swi_handler: .word hang
+prefetch_handler: .word hang
+data_handler: .word hang
+unused_handler: .word hang
+irq_handler: .word irq
+fiq_handler: .word hang
+
+the bootloader has an idt_init function to move these instructions
+into the start of memory. It uses the already defined memcpy function
+
+apparantly there are several modes for the processor which each use different stack pointers
+when you receive an interrupt you are supposed to switch to interrupt mode?
+solves this by setting aside memory for the interrupt stack, then pointing the stack to it
+the mode is changed by writing a value into cpsr_c
+
+    ;@ (PSR_IRQ_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
+    mov r0,#0xD2
+    msr cpsr_c,r0
+    mov sp,#0x8000
+
+    ;@ (PSR_FIQ_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
+    mov r0,#0xD1
+    msr cpsr_c,r0
+    mov sp,#0x4000
+
+    ;@ (PSR_SVC_MODE|PSR_FIQ_DIS|PSR_IRQ_DIS)
+    mov r0,#0xD3
+    msr cpsr_c,r0
+    mov sp,#0x8000000
+
+    ;@ SVC MODE, IRQ ENABLED, FIQ DIS
+    ;@mov r0,#0x53
+    ;@msr cpsr_c, r0
+
+the irq stack starts at 0x8000 (first location is 0x7FFC)
+(fills "upwards" in memory)
+
+interrupt initialization (handled by bootloader)
+load timer pre-divider 
+enable timer interrupts
+load timer value
+enable timer
+
+
+irq handler:
+1. saves context of current process (pushes the relevent registers onto it's stack)
+2. disable the timer
+3. wake up sleeping processes
+4. acknowledge interrupt
+5. enable timer
+6. invoke scheduler
+
+
+there are fuctions defined in interrupts.c to allow easy access to these registers
+
+interrupt control registers
+0x7E00B000
++
+0x200	IRQ basic pending
+0x204	IRQ pending 1
+0x208	IRQ pending 2
+0x20C	FIQ control
+0x210	Enable IRQs 1
+0x214	Enable IRQs 2
+0x218	Enable Basic IRQs
+0x21C	Disable IRQs 1
+0x220	Disable IRQs 2
+0x224	Disable Basic IRQs
+
+need access to arm timer for interrupt
+
+Base Interrupt enable register.
+Name: IRQ enable 3
+Address: base + 0x218
+Reset: 0x000
+
+31:8	R/Wbs	<Unused>
+7	R/Wbs	Set to enable Access error type-0 IRQ
+6	R/Wbs	Set to enable Access error type	-1 IRQ
+5	R/Wbs	Set to enable GPU 1 Halted IRQ
+4	R/Wbs	Set to enable GPU 0 Halted IRQ
+3	R/Wbs	Set to enable ARM Doorbell 1 IRQ
+2	R/Wbs	Set to enable ARM Doorbell 0 IRQ
+1	R/Wbs	Set to enable ARM Mailbox IRQ
+0	R/Wbs	Set to enable ARM Timer IRQ 
+
+set bit 0 of this register to enable arm Timer IRQs
+
+
+interrupt disable is 0x224, same options, set to disable
+
+Timer:
+
+The base address for the ARM timer register is 0x7E00B000
+
+0x400	Load	
+0x404	Value	(Read Only)
+0x408	Control
+0x40C	IRQ Clear/Ack	(Write only)
+0x410	RAW IRQ	(Read Only)
+0x414	Masked IRQ	(Read Only)
+0x418	Reload
+0x41C	Pre-divider	(Not in real 804!)
+0x420	Free running counter (Not in real 804!)
+
+from pi documentation:
+"Timer Load register
+The timer load register sets the time for the timer
+to count down. This value is loaded into the timer
+value register after the load register has been wri
+tten or if the timer-value register has counted
+down to 0. "
+
+"Timer Value register:
+This register holds the current timer value and is
+counted down when the counter is running. It is
+counted down each timer clock until the value 0 is
+reached. Then the value register is re-loaded from
+the timer load register and the interrupt pending b
+it is set. The timer count down speed is set by the
+timer pre-divide register. "
+
+Timer control register:
+Name: Timer control
+Address: base + 0x408???
+Reset: 0x3E0020
+
+31:10	-	<Unused>
+23:16	R/W	Free running counter pre-scaler. Freq is sys_clk/(prescale+1)	These bits do not exists in a standard 804! Reset value is 0x3E
+15:10	-	<Unused>
+9	R/W	0 : Free running counter Disabled	
+		1 : Free running counter Enabled	
+		This bit does not exists in a standard 804 timer!
+8	R/W	0 : Timers keeps running if ARM is in debug halted mode		
+		1 : Timers halted if ARM is in debug halted mode	
+		This bit does not exists in a standard 804 timer
+7	R/W	0 : Timer disabled	
+		1 : Timer enabled
+6	R/W	Not used
+5	R/W	0 : Timer interrupt disabled	
+		1 : Timer interrupt enabled
+4	R/W	<Not used>
+3:2	R/W	Pre-scale bits:
+				00 : pre-scale is clock / 1 (No pre-scale)
+				01 : pre-scale is clock / 16
+				10 : pre-scale is clock / 256
+				11 : pre-scale is clock / 1
+				(Undefined in 804)
+1	R/W	0 : 16-bit counters	1 : 23-bit counter
+0	R/W	Not used
+
+"Timer IRQ clear register:
+The timer IRQ clear register is write only. When writing 
+this register the interrupt-pending bit is
+cleared. "
+
+Raw IRQ: read bit 0:status of interrupt pending bit
+Masked IRQ: read bit 0: (interrupt pending & interrupt enabled)
+
+Timer Reload register: value is loaded into value when the timer hits 0
+

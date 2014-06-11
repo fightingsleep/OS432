@@ -1,0 +1,42 @@
+IO documentation
+
+Input:
+
+The Operating System uses keyboard input based on drivers developed by Alex
+Chadwick (Baking Pi creator). Unfortunately both the USB driver and the
+keyboard driver have issues that cause the Raspberry Pi to crash randomly.
+However, when the drivers decide to work properly they allow us to grab a
+character at a time from the keyboard. The driver is not interrupt based,
+which means that keystrokes can be missed (especially when there are
+multiple processes running). Ideally we would write an interrupt driven
+driver for the keyboard, but this is far too much work on its own.
+
+We initalize the USB in the input_init() function located in IO_init.c,
+and we poll for keystrokes in the osc_getstring system call when requested
+by the user programs.
+
+Output:
+
+Our output is based on the assembly functions that result from following the
+baking pi tutorials. We wrote headers for all of these functions (print.h),
+and this allows us to call them directly from our C functions. Since these
+functions directly modify the frame buffer, we made system calls that the
+user programs can call to get access to this functionality. These system
+calls are described in the Input/Output section of the user_syscalls.h file.
+They include the ability to print strings to the screen (osc_drawstring,
+osc_drawstringln) and all of the coordinates are managed within these system
+calls. We also included system calls to allow the user to draw lines to the
+screen and to allow the user to change the color of the text printed to the
+screen.
+
+The assembly functions located in drawing.s, framebuffer.s, and mailbox.s
+are responsible for communicating with the GPU, getting an appropriate frame
+buffer, and printing text within this frame buffer. Mailbox.s contains the
+functions that setup a mailbox in memory that can be used to talk with the
+GPU. Framebuffer.s contains the functions that place requests for a framebuffer
+in the mailbox, and initalize the appropriate frame buffer description
+structure. Drawing.s contains the functions that actually print text within
+the frame buffer (DrawPixel, DrawCharacter, DrawString, ect). All of the
+functions that print characters use the file called Font.bin. This file
+contains bitmaps for all of the ASCII characters that the printing methods
+require.  

@@ -1,0 +1,26 @@
+char outH[10];
+char outB[32];
+char outD[11];
+int length;
+unsigned int* garbage;
+toHexString(GetSystemTimerBase(), outH);
+toBinString(GetSystemTimerBase(), outB);
+
+/* Preparing the screen to print */
+garbage = (unsigned int*) InitialiseFrameBuffer(1024, 768, 16);
+SetGraphicsAddress((struct FrameBuferDescription*) garbage);
+
+/* Printing to screen */
+DrawString(greetingMessage, 31, 0, 0);
+DrawString(promptMessage, 24, 0, 16);
+
+/* Gets the address of the system timer */
+//DrawString(GetSystemTimerBase(), 32, 0, 32);
+DrawString(outH, 10, 0, 32);
+DrawString(outB, 32, 0, 48);
+
+toHexString((void*) garbage[8], outH);
+DrawString(outH, 10, 0, 64);
+
+length = toDecimalString(700000000, outD);
+DrawString(outD, length, 0, 80);

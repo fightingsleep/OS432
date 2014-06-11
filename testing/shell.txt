@@ -1,0 +1,149 @@
+/**
+ * Function executed by the first process.
+ */
+
+#include "print.h"
+#include "tostring.h"
+#include "timer.h"
+#include "keyboard.h"
+#include "leds.h"
+
+#define NULL ((void*) 0)
+
+int x;
+int y;
+char error1[] = "*** Keyboard failed to communicate ***";
+char error2[] = "*** Command too long ***";
+char welcomemsg[] = "Welcome to our OS";
+char prompt[] = "Please enter a command: ";
+char printcmd[] = "print";
+char blinkcmd[] = "blink";
+char factcmd[] = "fact";
+char invalidcmd[] = "*** Not a valid command ***";
+int lettercount = 0;
+char letter;
+char command[25];
+
+int factorialfunc(int i)
+{
+	if(i <= 1)
+	{
+		return 1;
+	}
+	return i * factorialfunc(i - 1);
+}
+
+unsigned int factorialprocess(void)
+{
+	char out[] = "aaaaaaaaaaaa";
+	int i = factorialfunc(10);
+	int numchar = toDecimalString(i, out);
+	DrawString(out, numchar, x, y);
+	y += 16;
+	while(1);
+	return 0;
+}
+
+unsigned int printled(void)
+{
+	DrawString(printcmd, 5, 800, 0);
+	while(1);
+	return 0;
+}
+
+unsigned int blinkled(void)
+{
+	DrawString(blinkcmd, 5, 700, 0);
+	while(1);
+	return 0;
+}
+
+int strcmp(const char* s1, const char* s2)
+{
+	while(*s1 && (*s1==*s2))
+	{
+		s1++,s2++;
+    	}
+	return *(const unsigned char*)s1-*(const unsigned char*)s2;
+}
+
+void master_process()
+{
+	x = 0;
+	y = 0;
+
+	internal_create_process(printled, 0, 0, 0, 0);
+
+	DrawString(welcomemsg, 17, x, y);
+	y += 16;
+
+	if(!UsbInitialise())
+	{
+		DrawString(error1, 38, x, y);
+		y+= 16;
+		while(!UsbInitialise);	
+	}
+
+	DrawString(prompt, 24, x, y);
+	y += 16;
+
+
+	while(1)
+	{
+		KeyboardUpdate();
+		letter = KeyboardGetChar();
+		if(letter != 0 && letter != '\n')
+		{
+			DrawCharacter(letter, x, y);
+			x+=8;
+			command[lettercount] = letter;
+			lettercount ++;
+		}
+		if(lettercount >= 24)
+		{
+			x = 0;
+			y += 16;
+			DrawString(error2, 24, x, y);
+			x = 0;
+			y += 16;
+			lettercount = 0;
+			DrawString(prompt, 24, x, y);
+			y += 16;
+		}
+		if(letter == '\n')
+		{
+			command[lettercount] = NULL;
+			lettercount = 0;
+			x = 0;
+			y += 16;
+			if(strcmp(command, blinkcmd) == 0)
+			{
+				internal_create_process(blinkled, 0, 0, 0, 0);
+			}
+			else if(strcmp(command, factcmd) == 0)
+			{
+				internal_create_process(factorialprocess, 0, 0, 0, 0);
+			}
+			else
+			{
+				DrawString(invalidcmd, 27, x, y);
+				y += 16;
+			}
+			DrawString(prompt, 24, x, y);
+			y += 16;
+		}
+		if(x >= 1024)
+		{
+			y += 16;
+			x = 0;
+		}
+		if(y >= 768)
+		{
+			clearScreen(bufDesc);
+			x = 0;
+			y = 0;
+			DrawString(prompt, 24, x, y);
+			y += 16;
+		}
+	}
+}

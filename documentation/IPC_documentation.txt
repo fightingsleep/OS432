@@ -1,0 +1,97 @@
+IPC documentation
+
+Implementations of system calls related to IPC are as follows:
+
+The Send Function, which also can receive
+	unsigned long long internal_send(unsigned int a0, unsigned int a1,
+		unsigned int a2, unsigned int a3, unsigned int a4)
+	Parameters used are a0, a1, a2, a3,
+
+The Get Reply from Sender Function
+	unsigned long long internal_get_reply(unsigned int a0, unsigned int a1,
+		unsigned int a2, unsigned int a3, unsigned int a4)
+	Parameters used are a0, a1, a2,
+
+The Wait For Sender Function
+	unsigned long long internal_wait_for_send(unsigned int a0, unsigned int a1,
+		unsigned int a2, unsigned int a3, unsigned int a4)
+	No Parameters are used in this function.
+	
+The Receive Function
+	unsigned long long internal_receive(unsigned int a0, unsigned int a1,
+		unsigned int a2, unsigned int a3, unsigned int a4)
+	Parameters used are a0, a1, a2.
+
+The Reply Function
+	unsigned long long internal_reply(unsigned int a0, unsigned int a1,
+		unsigned int a2, unsigned int a3, unsigned int a4)
+	Parameters used are a0, a1, a2.
+	
+The parameters are only used when necessary, if they are unneeded they are
+unused in their respective function. The Parameters are as follows:
+	a0 is the PID of the target process
+	a1 is the pointer to the data to send
+	a2 is the size of the message
+	a3 defines if the function will block until a reply has been given
+		(if 1 then block, else don't block)
+	a4 is currently unused by all functions.
+	
+Structures used in IPC
+	ipc_node
+		Represents a sent message
+		Includes:
+			Data pointer
+			Size
+			Sender
+			Next IPC Node
+	ipc_msg_list
+		Is a queue of messages
+		Includes:
+			IPC Node Head
+			IPC Node Tail
+
+The Send Function
+	This function can fail in the following ways:
+		IPC_INVALID_PID
+			If the PID provided to the function does not return a process
+			structure.
+		IPC_MEMORY_ERROR
+			If kmalloc fails during the execution of this function.
+	
+	After parameter checking has been done, new (kernel) memory will be
+	allocated to the newly created IPC node for the data to be copied from the
+	sender (origin) memory location.
+	The New IPC Node will be added to the tail of the message queue and the
+	receiving PID will be unblocked if it is blocked.
+	If a3 is 1, then the sending process will be blocked accordingly, and if so
+	the scheduler will be called.
+
+The Get Reply from Sender Function
+	If the memory size supplied in a1 is sufficiently large, the function will
+	simply execute a memory copy of the message data to the target memory
+	address.
+
+The Wait For Sender Function
+	While the message queue is empty, the process will be blocked and the
+	scheduler will be called.
+
+The Receive Function
+	The function gets the IPC node that is on the head of the message queue and
+	copies the data into the memory location specified at a1, and the size of
+	the message copied to the location a2. The node is then freed from memory.
+
+The Reply Function
+	This function can fail in the following ways:
+		IPC_INVALID_PID
+			If the PID provided to the function does not return a process
+			structure.
+		IPC_MEMORY_ERROR
+			If kmalloc fails during the execution of this function.
+		IPC_INVALID_REPLY
+			If the target process is not waiting for a reply or if it isn't
+			waiting for a reply from the PID sending the reply.
+			
+	The Process structure is captured for the PID specified in a0. Upon
+	success the data in the reply data is assigned to it, and the message
+	content is copied to the assigned memory location.
+

@@ -1,0 +1,41 @@
+Our critical path:
+
+We wanted to make sure that we had an operating system that could make user
+processes, schedule these processes in some manner, output something to the
+screen, and take some kind of user input. In order to achieve this we needed
+basic memory management, context switching, a clock interrupt, interrupt
+handling, and SVC handling (for syscalls).
+
+What would be nice to have:
+
+- Process / memory protection so that processes could only access their
+allocated memory, and couldn't wipe out other processes if something went
+wrong. This would involve programming the MMU and having some kind of paged
+memory.
+
+- Basic IPC primitives for coordination and message passing
+
+- A scheduling algorithm beyond basic round robin
+
+What we accomplished:
+
+- Basic memory management (kmalloc, malloc)
+
+- User process creation through our system call osc_create_process()
+
+- A working context switcher
+
+- A simple round robin scheduler
+
+- A clock interrupt
+
+- Screen output
+
+- Keyboard input (although buggy)
+
+- Basic IPC primitives (although buggy)
+
+- A reasonable number of system calls for user programs to use
+
+- A basic shell to launch processes from
+

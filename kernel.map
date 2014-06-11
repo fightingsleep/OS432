@@ -1,0 +1,787 @@
+Archive member included because of file (symbol)
+
+./libcsud.a(device.keyboard.c.o)
+                              build/keyboard.o (KeyboardGetAddress)
+./libcsud.a(platform.c.o)     ./libcsud.a(device.keyboard.c.o) (MemoryAllocate)
+./libcsud.a(usbd.c.o)         build/io_init.o (UsbInitialise)
+./libcsud.a(device.hid.c.o)   ./libcsud.a(device.keyboard.c.o) (HidReadDevice)
+./libcsud.a(device.hub.c.o)   ./libcsud.a(usbd.c.o) (HubPortReset)
+./libcsud.a(hcd.designware20.c.o)
+                              ./libcsud.a(usbd.c.o) (HcdSumbitControlMessage)
+./libcsud.a(hcd.designware20.roothub.c.o)
+                              ./libcsud.a(hcd.designware20.c.o) (HcdProcessRootHubMessage)
+./libcsud.a(platform.armv6.c.o)
+                              ./libcsud.a(hcd.designware20.c.o) (__aeabi_uidiv)
+./libcsud.a(platform.broadcom2835.c.o)
+                              ./libcsud.a(usbd.c.o) (MicroDelay)
+
+Allocating common symbols
+Common symbol       size              file
+
+CorePhysical        0x4               ./libcsud.a(hcd.designware20.c.o)
+kernel_heap         0xc               build/int_handlers.o
+syscall_functions   0x54              build/main.o
+sleeping            0x8               build/int_handlers.o
+processes           0x8               build/int_handlers.o
+DeviceNumbers       0x4               ./libcsud.a(usbd.c.o)
+HostPhysical        0x4               ./libcsud.a(hcd.designware20.c.o)
+current             0x4               build/int_handlers.o
+framebuffer         0x4               build/main.o
+keyboards           0x10              ./libcsud.a(device.keyboard.c.o)
+PowerPhysical       0x4               ./libcsud.a(hcd.designware20.c.o)
+Heap                0x4000            ./libcsud.a(platform.c.o)
+bufDesc             0x4               build/main.o
+Allocations         0xc00             ./libcsud.a(platform.c.o)
+kernel_stack        0x4               build/int_handlers.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD build/mailbox.o
+LOAD build/init.o
+LOAD build/frameBuffer.o
+LOAD build/systemTimer.o
+LOAD build/drawing.o
+LOAD build/gpio.o
+LOAD build/keyboard.o
+LOAD build/int_handlers.o
+LOAD build/main.o
+LOAD build/leds.o
+LOAD build/memcpy.o
+LOAD build/tostring.o
+LOAD build/print.o
+LOAD build/memory.o
+LOAD build/process.o
+LOAD build/scheduler.o
+LOAD build/master_process.o
+LOAD build/interrupts.o
+LOAD build/console_proc.o
+LOAD build/io_init.o
+LOAD build/ipc_syscalls.o
+LOAD build/memory_syscalls.o
+LOAD build/misc_syscalls.o
+LOAD build/process_syscalls.o
+LOAD build/user_syscalls.o
+LOAD build/syscalls_init.o
+LOAD build/string.o
+LOAD build/user_programs.o
+LOAD ./libcsud.a
+
+.init           0x00008000       0x6c
+ *(.init)
+ .init          0x00008000       0x6c build/init.o
+                0x00008000                _start
+
+.text           0x00008070     0xac68
+ *(.text)
+ .text          0x00008070       0x6c build/mailbox.o
+                0x00008078                MailboxRead
+                0x000080ac                MailboxWrite
+                0x00008070                GetMailboxBase
+ .text          0x000080dc        0x0 build/init.o
+ .text          0x000080dc       0x60 build/frameBuffer.o
+                0x000080dc                InitialiseFrameBuffer
+ .text          0x0000813c       0x40 build/systemTimer.o
+                0x0000813c                GetSystemTimerBase
+                0x00008154                Wait
+                0x00008144                GetTimeStamp
+ .text          0x0000817c      0x1d4 build/drawing.o
+                0x00008194                SetGraphicsAddress
+                0x000081a0                DrawPixel
+                0x00008264                DrawCharacter
+                0x000082d0                DrawString
+                0x0000817c                SetForeColour
+                0x000081e8                DrawLine
+ .text          0x00008350       0x98 build/gpio.o
+                0x00008358                SetGpioFunction
+                0x00008350                GetGpioAddress
+                0x000083a8                SetGpio
+ .text          0x000083e8      0x144 build/keyboard.o
+                0x000083e8                KeyboardUpdate
+                0x0000849c                KeyboardGetChar
+                0x0000846c                KeyWasDown
+ .text          0x0000852c      0x3b0 build/int_handlers.o
+                0x000085ac                svc_handler
+                0x0000852c                idt_init
+                0x000087f8                irq_handler
+ .text          0x000088dc       0x30 build/main.o
+                0x000088dc                initialize
+ .text          0x0000890c       0x84 build/leds.o
+                0x00008938                ledoff
+                0x0000890c                ledon
+                0x00008964                ledblink
+ .text          0x00008990       0xe0 build/memcpy.o
+                0x00008990                memcpy
+ .text          0x00008a70      0x274 build/tostring.o
+                0x00008b9c                toDecimalString
+                0x00008b18                toBinString
+                0x00008a70                toHexString
+ .text          0x00008ce4       0x6c build/print.o
+                0x00008ce4                clearScreen
+ .text          0x00008d50      0x508 build/memory.o
+                0x00008f34                kfree
+                0x00008d84                memory_allocator
+                0x00008f60                memory_deallocator
+                0x0000921c                memory_init
+                0x00008d50                kmalloc
+ .text          0x00009258      0x1e4 build/process.o
+                0x000093b0                get_by_pid
+                0x00009258                processes_init
+ .text          0x0000943c      0x2a0 build/scheduler.o
+                0x0000943c                schedule
+ .text          0x000096dc      0x214 build/master_process.o
+                0x000096dc                master_process
+ .text          0x000098f0      0x1f0 build/interrupts.o
+                0x00009958                disableTimer
+                0x00009ab4                timer_interrupt_init
+                0x00009998                enableTimer
+                0x000099d8                enableTimerInterrupts
+                0x00009a48                getTimerValue
+                0x00009928                ackTimerInterrupt
+                0x000098f0                loadPreDivValue
+                0x00009a80                loadTimerValue
+ .text          0x00009ae0      0x300 build/console_proc.o
+                0x00009b74                console_proc
+                0x00009ae0                move_screen_up
+ .text          0x00009de0       0x70 build/io_init.o
+                0x00009e08                output_init
+                0x00009de0                input_init
+ .text          0x00009e50      0x53c build/ipc_syscalls.o
+                0x00009e50                internal_send
+                0x0000a050                internal_get_reply
+                0x0000a164                internal_receive
+                0x0000a270                internal_reply
+                0x0000a100                internal_wait_for_send
+ .text          0x0000a38c       0xac build/memory_syscalls.o
+                0x0000a38c                internal_malloc
+                0x0000a3e0                internal_free
+ .text          0x0000a438      0x428 build/misc_syscalls.o
+                0x0000a460                internal_gettime
+                0x0000a7d4                internal_drawline
+                0x0000a438                internal_dummy_syscall
+                0x0000a698                internal_getstring
+                0x0000a820                internal_changeTextColor
+                0x0000a49c                internal_drawstring
+                0x0000a590                internal_drawstringln
+ .text          0x0000a860      0x868 build/process_syscalls.o
+                0x0000a924                internal_create_process
+                0x0000ade4                internal_exit
+                0x0000a860                internal_getpid
+                0x0000ac48                internal_waitpid
+                0x0000af80                internal_sleep
+                0x0000ac04                new_process
+                0x0000a8a4                internal_getppid
+                0x0000a8e8                get_free_pid
+                0x0000b08c                internal_yield
+ .text          0x0000b0c8      0x63c build/user_syscalls.o
+                0x0000b104                osc_free
+                0x0000b0c8                osc_malloc
+                0x0000b564                osc_drawstring
+                0x0000b694                osc_gettime
+                0x0000b21c                osc_receive
+                0x0000b1c4                osc_async_send
+                0x0000b668                osc_changeTextColor
+                0x0000b414                osc_yield
+                0x0000b130                osc_send
+                0x0000b618                osc_drawline
+                0x0000b48c                osc_print_line
+                0x0000b4e8                osc_get_string
+                0x0000b5d4                osc_getstring
+                0x0000b270                osc_reply
+                0x0000b360                osc_waitpid
+                0x0000b59c                osc_drawstringln
+                0x0000b2c4                osc_getpid
+                0x0000b430                osc_print_string
+                0x0000b3bc                osc_exit
+                0x0000b3e8                osc_sleep
+                0x0000b324                osc_create_process
+                0x0000b2f4                osc_getppid
+ .text          0x0000b704      0x168 build/syscalls_init.o
+                0x0000b704                syscalls_init
+ .text          0x0000b86c       0x80 build/string.o
+                0x0000b86c                strcmp
+ .text          0x0000b8ec      0x568 build/user_programs.o
+                0x0000bbb0                lineDraw
+                0x0000b8ec                printA
+                0x0000bad4                pidTalkChild
+                0x0000b94c                printC
+                0x0000b97c                pidTalk
+                0x0000b91c                printB
+ .text          0x0000be54     0x1000 ./libcsud.a(device.keyboard.c.o)
+                0x0000c6c4                KeyboardSetLeds
+                0x0000ccbc                KeyboardGetKeyDownCount
+                0x0000bf48                KeyboardIndex
+                0x0000cd20                KeyboadGetKeyIsDown
+                0x0000c8e0                KeyboardGetLedSupport
+                0x0000bed0                KeyboardDeallocate
+                0x0000c6b4                KeyboardCount
+                0x0000cc70                KeyboardGetModifiers
+                0x0000bfe8                KeyboardScan
+                0x0000bfa0                KeyboardGetAddress
+                0x0000cdd8                KeyboardGetKeyDown
+                0x0000c92c                KeyboardPoll
+                0x0000be54                KeyboardDetached
+ .text          0x0000ce54      0x5c0 ./libcsud.a(platform.c.o)
+                0x0000d3c4                MemoryCopy
+                0x0000ce54                MemoryReserve
+                0x0000d2ac                MemoryDeallocate
+                0x0000ce5c                MemoryAllocate
+ .text          0x0000d414     0x10e8 ./libcsud.a(usbd.c.o)
+                0x0000dbb8                UsbConfigure
+                0x0000e038                UsbScanDevice
+                0x0000e484                UsbInitialise
+                0x0000dae4                UsbSetConfiguration
+                0x0000d4f0                UsbControlMessage
+                0x0000d424                UsbPrintDeviceTree
+                0x0000e434                UsbScanRootHub
+                0x0000da04                UsbSetAddress
+                0x0000d8c4                UsbReadDeviceDescriptor
+                0x0000e260                UsbAllocateDevice
+                0x0000e4e0                UsbCheckForChange
+                0x0000e31c                UsbDeallocateDevice
+                0x0000dd88                UsbGetDescription
+                0x0000d7c4                UsbReadString
+                0x0000d740                UsbReadStringLang
+                0x0000d6d4                UsbGetString
+                0x0000d414                UsbGetRootHub
+                0x0000d5e8                UsbGetDescriptor
+ .text          0x0000e4fc     0x1b24 ./libcsud.a(device.hid.c.o)
+                0x0000f130                HidSetReport
+                0x0000efbc                HidEnumerateActionCountReport
+                0x0000e4fc                HidEnumerateActionCountField
+                0x0000f074                HidGetReport
+                0x0000f898                HidEnumerateReport
+                0x0000f9f0                HidParseReportDescriptor
+                0x0000f7e8                HidSetProtocol
+                0x0000f414                BitGetSigned
+                0x0000f30c                BitGetUnsigned
+                0x0000e660                HidEnumerateActionAddField
+                0x0000f440                HidReadDevice
+                0x0000e624                HidDetached
+                0x0000f1e0                BitSet
+                0x0000f63c                HidWriteDevice
+                0x0000fd20                HidScan
+                0x00010010                HidGetFieldValue
+                0x0000ee68                HidDeallocate
+ .text          0x00010020      0xd34 ./libcsud.a(device.hub.c.o)
+                0x00010294                HubGetStatus
+                0x0001044c                HubChangeFeature
+                0x00010020                HubDetached
+                0x00010940                HubCheckConnection
+                0x00010b3c                HubScan
+                0x00010a74                HubRecursiveCheck
+                0x000105bc                HubPowerOn
+                0x000100c0                HubDeallocate
+                0x00010500                HubChangePortFeature
+                0x00010664                HubPortReset
+                0x00010738                HubPortConnectionChanged
+                0x0001036c                HubPortGetStatus
+                0x0001019c                HubReadDescriptor
+ .text          0x00010d54     0x160c ./libcsud.a(hcd.designware20.c.o)
+                0x00010efc                SetReg
+                0x00010d54                WriteThroughRegMask
+                0x0001146c                HcdTransmitChannel
+                0x000119c8                HcdSumbitControlMessage
+                0x00011048                HcdTransmitFifoFlush
+                0x00010de8                WriteThroughReg
+                0x00012300                HcdStop
+                0x000115f4                HcdChannelSendWaitOne
+                0x000110dc                HcdReceiveFifoFlush
+                0x00011c10                HcdInitialise
+                0x00012324                HcdDeinitialise
+                0x00010f98                HcdReset
+                0x00010e94                ClearReg
+                0x00011154                HcdPrepareChannel
+                0x00011518                HcdChannelInterruptToError
+                0x00010df0                ReadBackReg
+                0x00011da4                HcdStart
+                0x000118b0                HcdChannelSendWait
+ .text          0x00012360      0x6f0 ./libcsud.a(hcd.designware20.roothub.c.o)
+                0x00012360                HcdProcessRootHubMessage
+ .text          0x00012a50      0x16c ./libcsud.a(platform.armv6.c.o)
+                0x00012b84                __aeabi_uidiv
+                0x00012a50                __aeabi_uidivmod
+ .text          0x00012bbc      0x11c ./libcsud.a(platform.broadcom2835.c.o)
+                0x00012bbc                MicroDelay
+                0x00012c2c                PowerOnUsb
+
+.rodata         0x00012cd8      0x3dc
+ .rodata        0x00012cd8       0xa8 build/master_process.o
+ .rodata        0x00012d80       0x10 build/misc_syscalls.o
+ .rodata        0x00012d90       0xdc build/user_programs.o
+ .rodata        0x00012e6c      0x248 ./libcsud.a(usbd.c.o)
+
+.rodata.str1.4  0x000130b4       0x10
+ .rodata.str1.4
+                0x000130b4       0x10 ./libcsud.a(usbd.c.o)
+
+.glue_7         0x000130c4        0x0
+ .glue_7        0x000130c4        0x0 build/mailbox.o
+ .glue_7        0x000130c4        0x0 build/init.o
+ .glue_7        0x000130c4        0x0 build/frameBuffer.o
+ .glue_7        0x000130c4        0x0 build/systemTimer.o
+ .glue_7        0x000130c4        0x0 build/drawing.o
+ .glue_7        0x000130c4        0x0 build/gpio.o
+ .glue_7        0x000130c4        0x0 build/keyboard.o
+ .glue_7        0x000130c4        0x0 build/int_handlers.o
+ .glue_7        0x000130c4        0x0 build/main.o
+ .glue_7        0x000130c4        0x0 build/leds.o
+ .glue_7        0x000130c4        0x0 build/memcpy.o
+ .glue_7        0x000130c4        0x0 build/tostring.o
+ .glue_7        0x000130c4        0x0 build/print.o
+ .glue_7        0x000130c4        0x0 build/memory.o
+ .glue_7        0x000130c4        0x0 build/process.o
+ .glue_7        0x000130c4        0x0 build/scheduler.o
+ .glue_7        0x000130c4        0x0 build/master_process.o
+ .glue_7        0x000130c4        0x0 build/interrupts.o
+ .glue_7        0x000130c4        0x0 build/console_proc.o
+ .glue_7        0x000130c4        0x0 build/io_init.o
+ .glue_7        0x000130c4        0x0 build/ipc_syscalls.o
+ .glue_7        0x000130c4        0x0 build/memory_syscalls.o
+ .glue_7        0x000130c4        0x0 build/misc_syscalls.o
+ .glue_7        0x000130c4        0x0 build/process_syscalls.o
+ .glue_7        0x000130c4        0x0 build/user_syscalls.o
+ .glue_7        0x000130c4        0x0 build/syscalls_init.o
+ .glue_7        0x000130c4        0x0 build/string.o
+ .glue_7        0x000130c4        0x0 build/user_programs.o
+ .glue_7        0x000130c4        0x0 ./libcsud.a(device.keyboard.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(platform.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(usbd.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(device.hid.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(device.hub.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(hcd.designware20.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(platform.armv6.c.o)
+ .glue_7        0x000130c4        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+
+.glue_7t        0x000130c4        0x0
+ .glue_7t       0x000130c4        0x0 build/mailbox.o
+ .glue_7t       0x000130c4        0x0 build/init.o
+ .glue_7t       0x000130c4        0x0 build/frameBuffer.o
+ .glue_7t       0x000130c4        0x0 build/systemTimer.o
+ .glue_7t       0x000130c4        0x0 build/drawing.o
+ .glue_7t       0x000130c4        0x0 build/gpio.o
+ .glue_7t       0x000130c4        0x0 build/keyboard.o
+ .glue_7t       0x000130c4        0x0 build/int_handlers.o
+ .glue_7t       0x000130c4        0x0 build/main.o
+ .glue_7t       0x000130c4        0x0 build/leds.o
+ .glue_7t       0x000130c4        0x0 build/memcpy.o
+ .glue_7t       0x000130c4        0x0 build/tostring.o
+ .glue_7t       0x000130c4        0x0 build/print.o
+ .glue_7t       0x000130c4        0x0 build/memory.o
+ .glue_7t       0x000130c4        0x0 build/process.o
+ .glue_7t       0x000130c4        0x0 build/scheduler.o
+ .glue_7t       0x000130c4        0x0 build/master_process.o
+ .glue_7t       0x000130c4        0x0 build/interrupts.o
+ .glue_7t       0x000130c4        0x0 build/console_proc.o
+ .glue_7t       0x000130c4        0x0 build/io_init.o
+ .glue_7t       0x000130c4        0x0 build/ipc_syscalls.o
+ .glue_7t       0x000130c4        0x0 build/memory_syscalls.o
+ .glue_7t       0x000130c4        0x0 build/misc_syscalls.o
+ .glue_7t       0x000130c4        0x0 build/process_syscalls.o
+ .glue_7t       0x000130c4        0x0 build/user_syscalls.o
+ .glue_7t       0x000130c4        0x0 build/syscalls_init.o
+ .glue_7t       0x000130c4        0x0 build/string.o
+ .glue_7t       0x000130c4        0x0 build/user_programs.o
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(device.keyboard.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(platform.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(usbd.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(device.hid.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(device.hub.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(hcd.designware20.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(platform.armv6.c.o)
+ .glue_7t       0x000130c4        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+
+.vfp11_veneer   0x000130c4        0x0
+ .vfp11_veneer  0x000130c4        0x0 build/mailbox.o
+ .vfp11_veneer  0x000130c4        0x0 build/init.o
+ .vfp11_veneer  0x000130c4        0x0 build/frameBuffer.o
+ .vfp11_veneer  0x000130c4        0x0 build/systemTimer.o
+ .vfp11_veneer  0x000130c4        0x0 build/drawing.o
+ .vfp11_veneer  0x000130c4        0x0 build/gpio.o
+ .vfp11_veneer  0x000130c4        0x0 build/keyboard.o
+ .vfp11_veneer  0x000130c4        0x0 build/int_handlers.o
+ .vfp11_veneer  0x000130c4        0x0 build/main.o
+ .vfp11_veneer  0x000130c4        0x0 build/leds.o
+ .vfp11_veneer  0x000130c4        0x0 build/memcpy.o
+ .vfp11_veneer  0x000130c4        0x0 build/tostring.o
+ .vfp11_veneer  0x000130c4        0x0 build/print.o
+ .vfp11_veneer  0x000130c4        0x0 build/memory.o
+ .vfp11_veneer  0x000130c4        0x0 build/process.o
+ .vfp11_veneer  0x000130c4        0x0 build/scheduler.o
+ .vfp11_veneer  0x000130c4        0x0 build/master_process.o
+ .vfp11_veneer  0x000130c4        0x0 build/interrupts.o
+ .vfp11_veneer  0x000130c4        0x0 build/console_proc.o
+ .vfp11_veneer  0x000130c4        0x0 build/io_init.o
+ .vfp11_veneer  0x000130c4        0x0 build/ipc_syscalls.o
+ .vfp11_veneer  0x000130c4        0x0 build/memory_syscalls.o
+ .vfp11_veneer  0x000130c4        0x0 build/misc_syscalls.o
+ .vfp11_veneer  0x000130c4        0x0 build/process_syscalls.o
+ .vfp11_veneer  0x000130c4        0x0 build/user_syscalls.o
+ .vfp11_veneer  0x000130c4        0x0 build/syscalls_init.o
+ .vfp11_veneer  0x000130c4        0x0 build/string.o
+ .vfp11_veneer  0x000130c4        0x0 build/user_programs.o
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(device.keyboard.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(platform.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(usbd.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(device.hid.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(device.hub.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(hcd.designware20.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(platform.armv6.c.o)
+ .vfp11_veneer  0x000130c4        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+
+.janus_2cc_veneer
+                0x000130c4        0x0
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/mailbox.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/init.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/frameBuffer.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/systemTimer.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/drawing.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/gpio.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/keyboard.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/int_handlers.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/main.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/leds.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/memcpy.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/tostring.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/print.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/memory.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/process.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/scheduler.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/master_process.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/interrupts.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/console_proc.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/io_init.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/ipc_syscalls.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/memory_syscalls.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/misc_syscalls.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/process_syscalls.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/user_syscalls.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/syscalls_init.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/string.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 build/user_programs.o
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(device.keyboard.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(platform.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(usbd.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(device.hid.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(device.hub.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(hcd.designware20.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(platform.armv6.c.o)
+ .janus_2cc_veneer
+                0x000130c4        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+
+.v4_bx          0x000130c4        0x0
+ .v4_bx         0x000130c4        0x0 build/mailbox.o
+ .v4_bx         0x000130c4        0x0 build/init.o
+ .v4_bx         0x000130c4        0x0 build/frameBuffer.o
+ .v4_bx         0x000130c4        0x0 build/systemTimer.o
+ .v4_bx         0x000130c4        0x0 build/drawing.o
+ .v4_bx         0x000130c4        0x0 build/gpio.o
+ .v4_bx         0x000130c4        0x0 build/keyboard.o
+ .v4_bx         0x000130c4        0x0 build/int_handlers.o
+ .v4_bx         0x000130c4        0x0 build/main.o
+ .v4_bx         0x000130c4        0x0 build/leds.o
+ .v4_bx         0x000130c4        0x0 build/memcpy.o
+ .v4_bx         0x000130c4        0x0 build/tostring.o
+ .v4_bx         0x000130c4        0x0 build/print.o
+ .v4_bx         0x000130c4        0x0 build/memory.o
+ .v4_bx         0x000130c4        0x0 build/process.o
+ .v4_bx         0x000130c4        0x0 build/scheduler.o
+ .v4_bx         0x000130c4        0x0 build/master_process.o
+ .v4_bx         0x000130c4        0x0 build/interrupts.o
+ .v4_bx         0x000130c4        0x0 build/console_proc.o
+ .v4_bx         0x000130c4        0x0 build/io_init.o
+ .v4_bx         0x000130c4        0x0 build/ipc_syscalls.o
+ .v4_bx         0x000130c4        0x0 build/memory_syscalls.o
+ .v4_bx         0x000130c4        0x0 build/misc_syscalls.o
+ .v4_bx         0x000130c4        0x0 build/process_syscalls.o
+ .v4_bx         0x000130c4        0x0 build/user_syscalls.o
+ .v4_bx         0x000130c4        0x0 build/syscalls_init.o
+ .v4_bx         0x000130c4        0x0 build/string.o
+ .v4_bx         0x000130c4        0x0 build/user_programs.o
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(device.keyboard.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(platform.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(usbd.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(device.hid.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(device.hub.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(hcd.designware20.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(platform.armv6.c.o)
+ .v4_bx         0x000130c4        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+
+.data           0x00014000     0x196c
+ *(.data)
+ .data          0x00014000        0x0 build/mailbox.o
+ .data          0x00014000        0x0 build/init.o
+ .data          0x00014000     0x1000 build/frameBuffer.o
+                0x00014000                FrameBufferInfo
+ .data          0x00015000        0x0 build/systemTimer.o
+ .data          0x00015000      0x810 build/drawing.o
+ .data          0x00015810        0x0 build/gpio.o
+ .data          0x00015810       0xe0 build/keyboard.o
+ .data          0x000158f0        0x0 build/int_handlers.o
+ .data          0x000158f0        0x0 build/main.o
+ .data          0x000158f0        0x0 build/leds.o
+ .data          0x000158f0        0x0 build/memcpy.o
+ .data          0x000158f0       0x10 build/tostring.o
+                0x000158f0                hex
+ .data          0x00015900        0x0 build/print.o
+ .data          0x00015900        0x0 build/memory.o
+ .data          0x00015900        0x0 build/process.o
+ .data          0x00015900        0x0 build/scheduler.o
+ .data          0x00015900        0x0 build/master_process.o
+ .data          0x00015900        0x0 build/interrupts.o
+ .data          0x00015900        0x0 build/console_proc.o
+ .data          0x00015900        0x0 build/io_init.o
+ .data          0x00015900        0x0 build/ipc_syscalls.o
+ .data          0x00015900        0x0 build/memory_syscalls.o
+ .data          0x00015900        0x0 build/misc_syscalls.o
+ .data          0x00015900        0x4 build/process_syscalls.o
+                0x00015900                next_free
+ .data          0x00015904        0x0 build/user_syscalls.o
+ .data          0x00015904        0x0 build/syscalls_init.o
+ .data          0x00015904        0x0 build/string.o
+ .data          0x00015904        0x0 build/user_programs.o
+ .data          0x00015904        0x0 ./libcsud.a(device.keyboard.c.o)
+ .data          0x00015904        0x4 ./libcsud.a(platform.c.o)
+                0x00015904                FirstAllocation
+ .data          0x00015908        0x0 ./libcsud.a(usbd.c.o)
+ .data          0x00015908        0x0 ./libcsud.a(device.hid.c.o)
+ .data          0x00015908        0x0 ./libcsud.a(device.hub.c.o)
+ .data          0x00015908        0x0 ./libcsud.a(hcd.designware20.c.o)
+ .data          0x00015908       0x64 ./libcsud.a(hcd.designware20.roothub.c.o)
+                0x00015938                String0
+                0x00015960                HubDescriptor
+                0x00015908                DeviceDescriptor
+                0x0001591c                ConfigurationDescriptor
+                0x0001593c                String1
+ .data          0x0001596c        0x0 ./libcsud.a(platform.armv6.c.o)
+ .data          0x0001596c        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+OUTPUT(build/output.elf elf32-littlearm)
+
+.bss            0x00015970     0x4ce4
+ .bss           0x00015970        0x0 build/mailbox.o
+ .bss           0x00015970        0x0 build/init.o
+ .bss           0x00015970        0x0 build/frameBuffer.o
+ .bss           0x00015970        0x0 build/systemTimer.o
+ .bss           0x00015970        0x0 build/drawing.o
+ .bss           0x00015970        0x0 build/gpio.o
+ .bss           0x00015970        0x0 build/keyboard.o
+ .bss           0x00015970        0x0 build/int_handlers.o
+ COMMON         0x00015970       0x24 build/int_handlers.o
+                0x00015970                kernel_heap
+                0x0001597c                sleeping
+                0x00015984                processes
+                0x0001598c                current
+                0x00015990                kernel_stack
+ .bss           0x00015994        0x0 build/main.o
+ COMMON         0x00015994       0x5c build/main.o
+                0x00015994                syscall_functions
+                0x000159e8                framebuffer
+                0x000159ec                bufDesc
+ .bss           0x000159f0        0x0 build/leds.o
+ .bss           0x000159f0        0x0 build/memcpy.o
+ .bss           0x000159f0        0x0 build/tostring.o
+ .bss           0x000159f0        0x0 build/print.o
+ .bss           0x000159f0        0x0 build/memory.o
+ .bss           0x000159f0        0x0 build/process.o
+ .bss           0x000159f0        0x0 build/scheduler.o
+ .bss           0x000159f0        0x0 build/master_process.o
+ .bss           0x000159f0        0x0 build/interrupts.o
+ .bss           0x000159f0        0x0 build/console_proc.o
+ .bss           0x000159f0        0x0 build/io_init.o
+ .bss           0x000159f0        0x0 build/ipc_syscalls.o
+ .bss           0x000159f0        0x0 build/memory_syscalls.o
+ .bss           0x000159f0        0x8 build/misc_syscalls.o
+                0x000159f0                xScreenCoord
+                0x000159f4                yScreenCoord
+ .bss           0x000159f8        0x0 build/process_syscalls.o
+ .bss           0x000159f8        0x0 build/user_syscalls.o
+ .bss           0x000159f8        0x0 build/syscalls_init.o
+ .bss           0x000159f8        0x0 build/string.o
+ .bss           0x000159f8        0x0 build/user_programs.o
+ .bss           0x000159f8       0x14 ./libcsud.a(device.keyboard.c.o)
+                0x000159f8                keyboardAddresses
+                0x00015a08                keyboardCount
+ COMMON         0x00015a0c       0x10 ./libcsud.a(device.keyboard.c.o)
+                0x00015a0c                keyboards
+ .bss           0x00015a1c        0x8 ./libcsud.a(platform.c.o)
+                0x00015a1c                FirstFreeAllocation
+                0x00015a20                allocated
+ *fill*         0x00015a24        0x4 00
+ COMMON         0x00015a28     0x4c00 ./libcsud.a(platform.c.o)
+                0x00015a28                Heap
+                0x00019a28                Allocations
+ .bss           0x0001a628        0x4 ./libcsud.a(usbd.c.o)
+                0x0001a628                RootHub
+ COMMON         0x0001a62c        0x4 ./libcsud.a(usbd.c.o)
+                0x0001a62c                DeviceNumbers
+ .bss           0x0001a630        0x0 ./libcsud.a(device.hid.c.o)
+ .bss           0x0001a630        0x0 ./libcsud.a(device.hub.c.o)
+ .bss           0x0001a630       0x14 ./libcsud.a(hcd.designware20.c.o)
+                0x0001a634                Host
+                0x0001a630                Core
+                0x0001a638                Power
+                0x0001a63c                databuffer
+                0x0001a640                PhyInitialised
+ COMMON         0x0001a644        0xc ./libcsud.a(hcd.designware20.c.o)
+                0x0001a644                CorePhysical
+                0x0001a648                HostPhysical
+                0x0001a64c                PowerPhysical
+ .bss           0x0001a650        0x4 ./libcsud.a(hcd.designware20.roothub.c.o)
+                0x0001a650                RootHubDeviceNumber
+ .bss           0x0001a654        0x0 ./libcsud.a(platform.armv6.c.o)
+ .bss           0x0001a654        0x0 ./libcsud.a(platform.broadcom2835.c.o)
+
+.ARM.attributes
+                0x00000000       0x24
+ .ARM.attributes
+                0x00000000       0x14 build/mailbox.o
+ .ARM.attributes
+                0x00000014       0x14 build/init.o
+ .ARM.attributes
+                0x00000028       0x14 build/frameBuffer.o
+ .ARM.attributes
+                0x0000003c       0x14 build/systemTimer.o
+ .ARM.attributes
+                0x00000050       0x14 build/drawing.o
+ .ARM.attributes
+                0x00000064       0x14 build/gpio.o
+ .ARM.attributes
+                0x00000078       0x14 build/keyboard.o
+ .ARM.attributes
+                0x0000008c       0x2e build/int_handlers.o
+ .ARM.attributes
+                0x000000ba       0x2e build/main.o
+ .ARM.attributes
+                0x000000e8       0x2e build/leds.o
+ .ARM.attributes
+                0x00000116       0x2e build/memcpy.o
+ .ARM.attributes
+                0x00000144       0x2e build/tostring.o
+ .ARM.attributes
+                0x00000172       0x2e build/print.o
+ .ARM.attributes
+                0x000001a0       0x2e build/memory.o
+ .ARM.attributes
+                0x000001ce       0x2e build/process.o
+ .ARM.attributes
+                0x000001fc       0x2e build/scheduler.o
+ .ARM.attributes
+                0x0000022a       0x2e build/master_process.o
+ .ARM.attributes
+                0x00000258       0x2e build/interrupts.o
+ .ARM.attributes
+                0x00000286       0x2e build/console_proc.o
+ .ARM.attributes
+                0x000002b4       0x2e build/io_init.o
+ .ARM.attributes
+                0x000002e2       0x2e build/ipc_syscalls.o
+ .ARM.attributes
+                0x00000310       0x2e build/memory_syscalls.o
+ .ARM.attributes
+                0x0000033e       0x2e build/misc_syscalls.o
+ .ARM.attributes
+                0x0000036c       0x2e build/process_syscalls.o
+ .ARM.attributes
+                0x0000039a       0x2e build/user_syscalls.o
+ .ARM.attributes
+                0x000003c8       0x2e build/syscalls_init.o
+ .ARM.attributes
+                0x000003f6       0x2e build/string.o
+ .ARM.attributes
+                0x00000424       0x2e build/user_programs.o
+ .ARM.attributes
+                0x00000452       0x32 ./libcsud.a(device.keyboard.c.o)
+ .ARM.attributes
+                0x00000484       0x32 ./libcsud.a(platform.c.o)
+ .ARM.attributes
+                0x000004b6       0x32 ./libcsud.a(usbd.c.o)
+ .ARM.attributes
+                0x000004e8       0x32 ./libcsud.a(device.hid.c.o)
+ .ARM.attributes
+                0x0000051a       0x32 ./libcsud.a(device.hub.c.o)
+ .ARM.attributes
+                0x0000054c       0x32 ./libcsud.a(hcd.designware20.c.o)
+ .ARM.attributes
+                0x0000057e       0x32 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .ARM.attributes
+                0x000005b0       0x32 ./libcsud.a(platform.armv6.c.o)
+ .ARM.attributes
+                0x000005e2       0x32 ./libcsud.a(platform.broadcom2835.c.o)
+
+.comment        0x00000000      0x383
+ .comment       0x00000000       0x2a build/int_handlers.o
+ .comment       0x0000002a       0x2a build/main.o
+ .comment       0x00000054       0x2a build/leds.o
+ .comment       0x0000007e       0x2a build/memcpy.o
+ .comment       0x000000a8       0x2a build/tostring.o
+ .comment       0x000000d2       0x2a build/print.o
+ .comment       0x000000fc       0x2a build/memory.o
+ .comment       0x00000126       0x2a build/process.o
+ .comment       0x00000150       0x2a build/scheduler.o
+ .comment       0x0000017a       0x2a build/master_process.o
+ .comment       0x000001a4       0x2a build/interrupts.o
+ .comment       0x000001ce       0x2a build/console_proc.o
+ .comment       0x000001f8       0x2a build/io_init.o
+ .comment       0x00000222       0x2a build/ipc_syscalls.o
+ .comment       0x0000024c       0x2a build/memory_syscalls.o
+ .comment       0x00000276       0x2a build/misc_syscalls.o
+ .comment       0x000002a0       0x2a build/process_syscalls.o
+ .comment       0x000002ca       0x2a build/user_syscalls.o
+ .comment       0x000002f4       0x2a build/syscalls_init.o
+ .comment       0x0000031e       0x2a build/string.o
+ .comment       0x00000348       0x2a build/user_programs.o
+ .comment       0x00000372       0x11 ./libcsud.a(device.keyboard.c.o)
+                                 0x12 (size before relaxing)
+ .comment       0x00000000       0x12 ./libcsud.a(platform.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(usbd.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(device.hid.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(device.hub.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(hcd.designware20.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(hcd.designware20.roothub.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(platform.armv6.c.o)
+ .comment       0x00000000       0x12 ./libcsud.a(platform.broadcom2835.c.o)
